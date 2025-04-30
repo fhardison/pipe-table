@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4a5568">
+    <title>CSV to Markdown Table</title>
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNTViBUbyBNYXJrZG93biBUYWJsZSIsCiAgInNob3J0X25hbWUiOiAiQ1NWMk1EIiwKICAiZGVzY3JpcHRpb24iOiAiQ29udmVydCBDU1YgZmlsZXMgdG8gTWFya2Rvd24gcGlwZSB0YWJsZXMiLAogICJzdGFydF91cmwiOiAiLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzRhNTU2OCIsCiAgInRoZW1lX2NvbG9yIjogIiM0YTU1NjgiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSEJ5WlhObGNuWmxRWE53WldOMFVtRjBhVzg5SW5oTmFXNVpUV2x1SUcxbFpYUWlJSFpwWlhkQ2IzZzlJakFnTUNBek5UQWdNelV3SWo0OGMzUjViR1UrTG1KaGMyVWdleUJtYVd4c09pQjNhR2wwWlRzZ1ptOXVkQzFtWVcxcGJIazZJSE5sY21sbU95QjBaWGgwTFdGdVkyaHZjam9nYzJWeWFXWTdJSDA4TDNOMGVXeGxQanh5WldOMElIZHBaSFJvUFNJeE1EQWxJaUJvWldsbmFIUTlJakV3TUNVaUlHWnBiR3c5SW1Kc1lXTnJJaUF2UGp4MFpYaDBJSGc5SWpFd0lpQjVQU0l5TUNJdlBqeDBaWGgwSUhnOUlqRXdJaUI1UFNJME1DSXZQangwWlhoMElIZzlJakV3SWlCNVBTSTJNQ0l2UGp4MFpYaDBJSGc5SWpVd0lpQjVQU0l5TUNJdlBqeDBaWGgwSUhnOUlqVXdJaUI1UFNJME1DSXZQangwWlhoMElIZzlJalV3SWlCNVBTSTJNQ0l2UGp4MFpYaDBJSGc5SWpnd0lpQjVQU0l5TUNJdlBqeDBaWGgwSUhnOUlqZ3dJaUI1UFNJME1DSXZQangwWlhoMElIZzlJamd3SWlCNVBTSTJNQ0l2UGp3dmMzWm5QZz09IiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9zdmcreG1sIgogICAgfQogIF0KfQ==">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iIzRhNTU2OCIgcng9IjMwIi8+PHRleHQgeD0iNjQiIHk9IjEyOCIgZm9udC1zaXplPSI2NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIj5DU1Y8L3RleHQ+PHRleHQgeD0iMTI4IiB5PSIxMjgiIGZvbnQtc2l6ZT0iNjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiI+MD48L3RleHQ+PHRleHQgeD0iMTkyIiB5PSIxMjgiIGZvbnQtc2l6ZT0iNjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiI+TUQ8L3RleHQ+PC9zdmc+">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4a5568;
+            --primary-light: #718096;
+            --primary-dark: #2d3748;
+            --accent-color: #48bb78;
+            --accent-light: #68d391;
+            --accent-dark: #38a169;
+            --text-color: #1a202c;
+            --text-light: #4a5568;
+            --text-dark: #000000;
+            --bg-color: #f7fafc;
+            --bg-dark: #e2e8f0;
+            --error-color: #e53e3e;
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-color: #4a5568;
+                --primary-light: #718096;
+                --primary-dark: #2d3748;
+                --accent-color: #48bb78;
+                --accent-light: #68d391;
+                --accent-dark: #38a169;
+                --text-color: #f7fafc;
+                --text-light: #e2e8f0;
+                --text-dark: #ffffff;
+                --bg-color: #1a202c;
+                --bg-dark: #2d3748;
+                --error-color: #fc8181;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .file-input-container {
+            position: relative;
+            width: 100%;
+            height: 100px;
+            border: 2px dashed var(--primary-light);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .file-input-container:hover, .file-input-container.dragover {
+            border-color: var(--accent-color);
+            background-color: var(--bg-dark);
+        }
+
+        .file-input-container input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .file-input-sublabel {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .output-container {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .output-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .copy-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--accent-dark);
+        }
+
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+
+        .copy-btn.copied {
+            background-color: var(--primary-color);
+        }
+
+        .markdown-output {
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            border-radius: 8px;
+            padding: 16px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            line-height: 1.4;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .settings-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .settings-header {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .settings-header::after {
+            content: '▼';
+            font-size: 0.75rem;
+            margin-left: 8px;
+        }
+
+        .settings-header.collapsed::after {
+            content: '►';
+        }
+
+        .settings-body {
+            padding: 10px;
+            background-color: var(--bg-dark);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .settings-body.collapsed {
+            display: none;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .setting-label {
+            flex: 1;
+            font-size: 0.875rem;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        .preview-table {
+            margin-top: 1rem;
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+            overflow-x: auto;
+            display: block;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .preview-table th, .preview-table td {
+            border: 1px solid var(--primary-light);
+            padding: 8px;
+            text-align: left;
+        }
+
+        .preview-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .preview-table tr:nth-child(even) {
+            background-color: var(--bg-dark);
+        }
+
+        .preview-container {
+            margin-top: 1.5rem;
+            display: none;
+        }
+
+        .preview-header {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--accent-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+                border-radius: 6px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .file-input-container {
+                height: 80px;
+                padding: 15px;
+            }
+
+            .file-input-label {
+                font-size: 0.875rem;
+            }
+
+            .file-input-sublabel {
+                font-size: 0.75rem;
+            }
+
+            .output-title {
+                font-size: 1rem;
+            }
+
+            .copy-btn {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+            }
+
+            .markdown-output {
+                padding: 12px;
+                font-size: 0.75rem;
+            }
+
+            .preview-table {
+                font-size: 0.75rem;
+            }
+
+            .preview-table th, .preview-table td {
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CSV to Markdown Table Converter</h1>
+        
+        <div class="input-container">
+            <div class="file-input-container" id="dropArea">
+                <input type="file" id="csvFile" accept=".csv,text/csv" aria-label="Upload CSV file">
+                <div class="file-input-label">Drop CSV file here or click to upload</div>
+                <div class="file-input-sublabel">Supported format: .csv</div>
+            </div>
+            <div class="error-message" id="errorMessage"></div>
+        </div>
+        
+        <div class="settings-container">
+            <div class="settings-header" id="settingsHeader">Settings</div>
+            <div class="settings-body" id="settingsBody">
+                <div class="setting-row">
+                    <label class="setting-label">
+                        <input type="checkbox" id="headerCheckbox" checked>
+                        First row as header
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <label class="setting-label">
+                        <input type="checkbox" id="trimCheckbox" checked>
+                        Trim whitespace
+                    </label>
+                </div>
+                <div class="setting-row">
+                    <label class="setting-label">
+                        <input type="checkbox" id="alignHeadersCheckbox" checked>
+                        Align column widths
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="preview-container" id="previewContainer">
+            <div class="preview-header">CSV Preview</div>
+            <div class="table-wrapper">
+                <table class="preview-table" id="previewTable"></table>
+            </div>
+        </div>
+        
+        <div class="output-container" id="outputContainer">
+            <div class="output-header">
+                <div class="output-title">Markdown Table</div>
+                <button class="copy-btn" id="copyBtn">Copy to Clipboard</button>
+            </div>
+            <pre class="markdown-output" id="markdownOutput"></pre>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast"></div>
+    
+    <script>
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(err => {
+                    console.log('Service Worker registration failed: ', err);
+                });
+            });
+        }
+
+        // Create a simple Service Worker script
+        const swContent = `
+            self.addEventListener('install', (event) => {
+                self.skipWaiting();
+            });
+
+            self.addEventListener('activate', (event) => {
+                return self.clients.claim();
+            });
+
+            self.addEventListener('fetch', (event) => {
+                event.respondWith(fetch(event.request));
+            });
+        `;
+
+        // Create a Blob with the Service Worker content
+        const swBlob = new Blob([swContent], { type: 'application/javascript' });
+        const swURL = URL.createObjectURL(swBlob);
+
+        // Create a link element to the service worker
+        const swLink = document.createElement('link');
+        swLink.rel = 'serviceworker';
+        swLink.href = './sw.js';
+        document.head.appendChild(swLink);
+
+        // Add the service worker script to the page
+        fetch(swURL)
+            .then(response => response.blob())
+            .then(blob => {
+                const swFile = new File([blob], 'sw.js', { type: 'application/javascript' });
+                navigator.serviceWorker.register(URL.createObjectURL(swFile));
+            })
+            .catch(err => console.error('Error creating service worker:', err));
+
+        // DOM Elements
+        const csvFileInput = document.getElementById('csvFile');
+        const markdownOutput = document.getElementById('markdownOutput');
+        const dropArea = document.getElementById('dropArea');
+        const outputContainer = document.getElementById('outputContainer');
+        const copyBtn = document.getElementById('copyBtn');
+        const toast = document.getElementById('toast');
+        const errorMessage = document.getElementById('errorMessage');
+        const headerCheckbox = document.getElementById('headerCheckbox');
+        const trimCheckbox = document.getElementById('trimCheckbox');
+        const alignHeadersCheckbox = document.getElementById('alignHeadersCheckbox');
+        const settingsHeader = document.getElementById('settingsHeader');
+        const settingsBody = document.getElementById('settingsBody');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewTable = document.getElementById('previewTable');
+
+        // Settings toggle
+        settingsHeader.addEventListener('click', () => {
+            settingsHeader.classList.toggle('collapsed');
+            settingsBody.classList.toggle('collapsed');
+        });
+
+        // File input event listener
+        csvFileInput.addEventListener('change', handleFileSelect);
+
+        // Drag and drop functionality
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => {
+                dropArea.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => {
+                dropArea.classList.remove('dragover');
+            }, false);
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                csvFileInput.files = files;
+                handleFileSelect();
+            }
+        }, false);
+
+        // Copy button functionality
+        copyBtn.addEventListener('click', () => {
+            const mdText = markdownOutput.textContent;
+            
+            // Use Clipboard API if available
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(mdText)
+                    .then(() => showToast('Table copied to clipboard!'))
+                    .catch(err => {
+                        console.error('Could not copy text: ', err);
+                        fallbackCopy(mdText);
+                    });
+            } else {
+                fallbackCopy(mdText);
+            }
+        });
+
+        // Fallback copy method
+        function fallbackCopy(text) {
+            // Create a temporary textarea
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';  // Prevent scrolling to bottom
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast('Table copied to clipboard!');
+                } else {
+                    showToast('Failed to copy. Please try manually selecting and copying.');
+                }
+            } catch (err) {
+                console.error('Fallback copy failed: ', err);
+                showToast('Failed to copy. Please try manually selecting and copying.');
+            }
+            
+            document.body.removeChild(textarea);
+        }
+
+        // Show toast message
+        function showToast(message) {
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            // Change copy button text
+            copyBtn.textContent = 'Copied!';
+            copyBtn.classList.add('copied');
+            
+            // Hide after 2 seconds
+            setTimeout(() => {
+                toast.style.display = 'none';
+                copyBtn.textContent = 'Copy to Clipboard';
+                copyBtn.classList.remove('copied');
+            }, 2000);
+        }
+
+        // Settings change event
+        [headerCheckbox, trimCheckbox, alignHeadersCheckbox].forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (csvFileInput.files.length > 0) {
+                    handleFileSelect();
+                }
+            });
+        });
+
+        // Handle file selection
+        function handleFileSelect() {
+            const file = csvFileInput.files[0];
+            if (!file) return;
+            
+            // Check if the file is a CSV
+            if (file.type !== 'text/csv' && !file.name.endsWith('.csv')) {
+                showError('Please upload a valid CSV file.');
+                return;
+            }
+            
+            // Reset error message
+            hideError();
+            
+            // Parse the CSV file
+            Papa.parse(file, {
+                header: false,
+                skipEmptyLines: 'greedy',
+                complete: function(results) {
+                    if (results.errors.length > 0) {
+                        showError(`Error parsing CSV: ${results.errors[0].message}`);
+                        return;
+                    }
+                    
+                    try {
+                        const csvData = results.data;
+                        if (csvData.length === 0) {
+                            showError('The CSV file is empty.');
+                            return;
+                        }
+                        
+                        // Generate preview
+                        generatePreview(csvData);
+                        
+                        // Generate markdown table
+                        const mdTable = generateMarkdownTable(csvData);
+                        markdownOutput.textContent = mdTable;
+                        
+                        // Show output container
+                        outputContainer.style.display = 'block';
+                    } catch (error) {
+                        showError(`Error processing CSV: ${error.message}`);
+                    }
+                }
+            });
+        }
+
+        // Generate CSV preview
+        function generatePreview(csvData) {
+            if (!csvData || csvData.length === 0) return;
+            
+            previewTable.innerHTML = '';
+            const hasHeader = headerCheckbox.checked;
+            
+            // Create header row if needed
+            if (hasHeader && csvData.length > 0) {
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                
+                csvData[0].forEach(cell => {
+                    const th = document.createElement('th');
+                    th.textContent = trimCheckbox.checked ? cell.trim() : cell;
+                    headerRow.appendChild(th);
+                });
+                
+                thead.appendChild(headerRow);
+                previewTable.appendChild(thead);
+            }
+            
+            // Create table body
+            const tbody = document.createElement('tbody');
+            const startRow = hasHeader ? 1 : 0;
+            
+            for (let i = startRow; i < csvData.length; i++) {
+                const row = document.createElement('tr');
+                
+                csvData[i].forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = trimCheckbox.checked ? cell.trim() : cell;
+                    row.appendChild(td);
+                });
+                
+                tbody.appendChild(row);
+            }
+            
+            previewTable.appendChild(tbody);
+            previewContainer.style.display = 'block';
+        }
+
+        // Generate markdown table
+        function generateMarkdownTable(csvData) {
+            if (!csvData || csvData.length === 0) return '';
+            
+            const hasHeader = headerCheckbox.checked;
+            const shouldTrim = trimCheckbox.checked;
+            const alignColumns = alignHeadersCheckbox.checked;
+            
+            // Prepare data
+            let data = csvData.map(row => 
+                row.map(cell => shouldTrim ? cell.trim() : cell)
+            );
+            
+            // Find the maximum width for each column if alignment is enabled
+            let colWidths = [];
+            if (alignColumns) {
+                const colCount = data[0].length;
+                for (let i = 0; i < colCount; i++) {
+                    colWidths[i] = 0;
+                    for (let j = 0; j < data.length; j++) {
+                        if (data[j][i] && data[j][i].length > colWidths[i]) {
+                            colWidths[i] = data[j][i].length;
+                        }
+                    }
+                }
+            }
+            
+            // Generate the markdown table
+            let mdTable = [];
+            
+            // Header row
+            if (hasHeader && data.length > 0) {
+                const headerRow = data[0].map((header, i) => {
+                    return alignColumns 
+                        ? header.padEnd(colWidths[i])
+                        : header;
+                }).join(' | ');
+                
+                mdTable.push(`| ${headerRow} |`);
+                
+                // Separator row
+                const separatorRow = data[0].map((_, i) => {
+                    return alignColumns 
+                        ? '-'.repeat(colWidths[i])
+                        : '-'.repeat(3);
+                }).join(' | ');
+                
+                mdTable.push(`| ${separatorRow} |`);
+                
+                // Data rows
+                for (let i = 1; i < data.length; i++) {
+                    const rowStr = data[i].map((cell, j) => {
+                        return alignColumns 
+                            ? cell.padEnd(colWidths[j])
+                            : cell;
+                    }).join(' | ');
+                    
+                    mdTable.push(`| ${rowStr} |`);
+                }
+            } else {
+                // No header, just data rows
+                for (let i = 0; i < data.length; i++) {
+                    const rowStr = data[i].map((cell, j) => {
+                        return alignColumns 
+                            ? cell.padEnd(colWidths[j])
+                            : cell;
+                    }).join(' | ');
+                    
+                    mdTable.push(`| ${rowStr} |`);
+                }
+                
+                // Add a separator row after the first row
+                if (data.length > 0) {
+                    const separatorIndex = 1;
+                    const separatorRow = data[0].map((_, i) => {
+                        return alignColumns 
+                            ? '-'.repeat(colWidths[i])
+                            : '-'.repeat(3);
+                    }).join(' | ');
+                    
+                    mdTable.splice(separatorIndex, 0, `| ${separatorRow} |`);
+                }
+            }
+            
+            return mdTable.join('\n');
+        }
+
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            outputContainer.style.display = 'none';
+            previewContainer.style.display = 'none';
+        }
+
+        // Hide error message
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
